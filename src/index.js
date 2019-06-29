@@ -1,32 +1,35 @@
-import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+import Phaser from "phaser"
+import { drawAtCenter } from "./common/draw"
+import GAME_CONFIGS from "./configs"
+import MAP from "./components/Map"
 
 const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
-  width: 800,
-  height: 600,
+  width: GAME_CONFIGS.screenWidth,
+  height: GAME_CONFIGS.screenHeight,
   scene: {
-    preload: preload,
-    create: create
-  }
-};
+    preload,
+    create,
+  },
+}
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(config)
 
 function preload() {
-  this.load.image("logo", logoImg);
+  // Get level assets and load them into the scene
+  Object.values(MAP).forEach(mapProperty =>
+    this.load.image(
+      mapProperty.key,
+      mapProperty.path,
+    )
+  )
 }
 
 function create() {
-  const logo = this.add.image(400, 150, "logo");
 
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
+  // Draw background
+  drawAtCenter(MAP.background, this)
+
 }
+
