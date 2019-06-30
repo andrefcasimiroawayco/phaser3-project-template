@@ -14,11 +14,11 @@ const MAP = {
   },
   pickup: {
     key: 'star',
-    path: 'assets/star.png',
+    path: star,
   },
   enemy: {
     key: 'bomb',
-    path: 'assets/bomb.png',
+    path: bomb,
   },
 }
 
