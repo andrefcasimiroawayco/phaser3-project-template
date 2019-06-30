@@ -31,6 +31,7 @@ const generateLTR = (key) => {
     frameRate: 10,
     repeat: -1,
   })
+
   anims.create({
     key: 'turn',
     frames: [
@@ -41,6 +42,7 @@ const generateLTR = (key) => {
     ],
     frameRate: 20,
   })
+
   anims.create({
     key: 'right',
     frames: anims.generateFrameNumbers(

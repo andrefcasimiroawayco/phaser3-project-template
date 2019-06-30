@@ -28,7 +28,7 @@ const config = {
 const game = new Phaser.Game(config)
 
 // World variables
-let player, platforms
+let player, platforms, stars
 // System variables
 let anims
 // Input manager
@@ -81,10 +81,26 @@ function create() {
   this.physics.add.collider(player, platforms)
 
   cursors = this.input.keyboard.createCursorKeys()
+
+  // add stars
+  stars = this.physics.add.group({
+    key: MAP.pickup.key,
+    repeat: 11,
+    setXY: { x: 12, y: 0, stepX: 70 }
+  })
+  stars.children.iterate((child) => {
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+  })
+  this.physics.add.collider(stars, platforms)
+  this.physics.add.overlap(player, stars, collectStar, null, this)
 }
 
 function update() {
   handleInput()
+}
+
+const collectStar = (player, star) => {
+  star.disableBody(true, true)
 }
 
 // We return whatever the helper methods need to handle various game logic here

@@ -4,10 +4,12 @@ import GAME_CONFIGS from "../../data/Global"
 let cursors, player
 
 export const handleInput = () => {
-  if (!cursors) {
+  if (!cursors)
+  {
     cursors = getReference("cursors")
   }
-  if (!player) {
+  if (!player)
+  {
     player = getReference("player")
   }
 
