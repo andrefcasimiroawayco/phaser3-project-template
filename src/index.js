@@ -3,6 +3,8 @@ import GAME_CONFIGS from "./data/Global"
 import MAP from "./data/Map"
 import SPRITES from "./data/Sprites"
 import { addPlatform } from "./helpers/platforms"
+import { handleInput } from "./helpers/input"
+import { generateSpriteAnimations } from "./helpers/anims"
 
 const config = {
   type: Phaser.AUTO,
@@ -24,8 +26,11 @@ const config = {
 }
 
 const game = new Phaser.Game(config)
+
 // World variables
 let player, platforms
+// System variables
+let anims
 // Input manager
 let cursors
 
@@ -49,7 +54,6 @@ function preload() {
 }
 
 function create() {
-
   // Draw background
   this.add.image(400, 300, MAP.background.key)
 
@@ -70,81 +74,30 @@ function create() {
   player.setBounce(0.2)
   player.setCollideWorldBounds(true)
 
-  this.anims.create({
-    key: 'left',
-    frames: this.anims.generateFrameNumbers(
-      SPRITES.player.key,
-      {
-        start: 0,
-        end: 3,
-      },
-    ),
-    frameRate: 10,
-    repeat: -1,
-  })
-  this.anims.create({
-    key: 'turn',
-    frames: [
-      {
-        key: SPRITES.player.key,
-        frame: 4,
-      }
-    ],
-    frameRate: 20,
-  })
-  this.anims.create({
-    key: 'right',
-    frames: this.anims.generateFrameNumbers(
-      SPRITES.player.key,
-      {
-        start: 5,
-        end: 8,
-      },
-    ),
-    frameRate: 10,
-    repeat: -1,
-  })
+  anims = this.anims
+  generateSpriteAnimations(SPRITES.player.key)
 
   // Set collision dynamic between player and ground
   this.physics.add.collider(player, platforms)
 
   cursors = this.input.keyboard.createCursorKeys()
-
 }
 
 function update() {
-
-  // Left
-  if (cursors.left.isDown)
-  {
-    player.setVelocityX(-GAME_CONFIGS.playerWalkVelocity)
-    player.anims.play('left', true)
-  }
-  // Right
-  else if (cursors.right.isDown)
-  {
-    player.setVelocityX(GAME_CONFIGS.playerWalkVelocity)
-    player.anims.play('right', true)
-  }
-  // Stop
-  else
-  {
-    player.setVelocityX(0)
-    player.anims.play('turn', true)
-  }
-
-  // Jump
-  if (cursors.up.isDown)
-  {
-    player.body.touching.down && player.setVelocityY(-GAME_CONFIGS.playerJumpVelocity)
-  }
+  handleInput()
 }
 
 // We return whatever the helper methods need to handle various game logic here
-export const getReference = (key) => {
+export const getReference = key => {
   switch(key) {
     case "platforms":
       return platforms
+    case "cursors":
+      return cursors
+    case "player":
+      return player
+    case "anims":
+      return anims
     default:
       return null
   }

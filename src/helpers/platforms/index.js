@@ -13,5 +13,5 @@ export const addPlatform = (
   key = MAP.platform.key,
 ) => {
   getReference("platforms")
-  .create(x, y, key)
+    .create(x, y, key)
 }
